@@ -8,9 +8,13 @@
     <body>
         <div>
             <h1>文件选择库</h1>
+            <button id="select">点击选择</button>
+            <input>
         </div>
     </body>
     <script>
-        selectFile()
+        document.getElementById("select").addEventListener("click", function(){
+            selectFile().then(file => console.log(file)).catch(err => console.log(err))
+        })
     </script>
 </html>
