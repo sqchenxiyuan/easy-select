@@ -13,7 +13,7 @@
     </body>
     <script>
         document.getElementById("select").addEventListener("click", function(){
-            selectFile("*.pdf").then(file => console.log(file)).catch(err => console.log(err))
+            selectFile("", 500 * 1024).then(file => console.log(file)).catch(err => console.log(err))
         })
     </script>
 </html>

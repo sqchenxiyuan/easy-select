@@ -47,22 +47,39 @@ class FileTypeFilter{
     }
 }
 
+class FileSizeFilter{
+    constructor(size){
+        this.size = size
+    }
+
+    filter(files){
+        return files.filter(file => {
+            return this.size >= file.size
+        })
+    }
+}
+
 //选取文件函数
-function selectFile(accept = "", size, ){
-    //后缀格式为 .xxx类型
-    //MIME为  xxxx/yy 或者 xxxx/*
-    //逗号分隔
-    let input = globalInput
-    let typeFilter = new FileTypeFilter(accept)
-    input.accept = typeFilter.getInputAccept()
-    input.multiple = true
-    
+function selectFile(accept = "", size){
     return new Promise((resolve, reject) => {
+        //后缀格式为 .xxx类型
+        //MIME为  xxxx/yy 或者 xxxx/*
+        //逗号分隔
+        let input = globalInput
+        let typeFilter = new FileTypeFilter(accept)
+        input.accept = typeFilter.getInputAccept()
+        input.multiple = true
+
         input.onchange = e => {
-            let files = input.files
+            let files = Array.from(input.files)
             if (files.length === 0) resolve([])
 
-            files = typeFilter.filter(Array.from(files))
+            files = typeFilter.filter(files)
+            if (size){
+                let sizeFilter = new FileSizeFilter(size)
+                files = sizeFilter.filter(files)
+            }
+
             resolve(files)
 
             document.removeEventListener("wheel", cancle, true)
