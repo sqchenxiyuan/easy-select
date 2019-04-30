@@ -1,7 +1,3 @@
-const globalInput = document.createElement("input")
-globalInput.type = "file"
-globalInput.style.opacity = "0"
-
 //文件类型过滤器
 class FileTypeFilter{
     constructor(acceptsString){
@@ -59,65 +55,79 @@ class FileSizeFilter{
     }
 }
 
-//选取文件函数
-function selectFile(accept = "", size){
+//核心选取文件函数
+function selectFiles(options){
+    let {
+        accept = "",
+        size = Infinity,
+        multiple = false
+    } = options
+
     return new Promise((resolve, reject) => {
         //后缀格式为 .xxx类型
         //MIME为  xxxx/yy 或者 xxxx/*
         //逗号分隔
-        let input = globalInput
-        let typeFilter = new FileTypeFilter(accept)
-        input.accept = typeFilter.getInputAccept()
-        input.multiple = true
+        let input = document.createElement("input")
+        input.type = "file"
+        input.style.opacity = "0"
+        input.value = ""
 
-        input.onchange = e => {
+        let typeFilter = new FileTypeFilter(accept)
+
+        input.accept = typeFilter.getInputAccept()
+        input.multiple = multiple
+
+        input.onchange = function(e){
             let files = Array.from(input.files)
-            if (files.length === 0) resolve([])
+            let rawFiles = files
+
+            //啥都没有
+            if (files.length === 0) cancle()
 
             files = typeFilter.filter(files)
             if (size){
                 let sizeFilter = new FileSizeFilter(size)
                 files = sizeFilter.filter(files)
             }
+            
+            unbindEvents()
+            input.onchange = null
 
-            resolve(files)
-
-            document.removeEventListener("wheel", cancle, true)
-            document.removeEventListener("mousemove", cancle, true)
-            document.removeEventListener("keydown", cancle, true)
-
-            // if (size && file.size > size){
-            //     reject(new TypeError("ERROR_FILE_SIZE"))
-            //     return
-            // }
-
-            // let result = true
-            // if (acceptTests.length > 0) {
-            //     result = acceptTests.some(test => {
-            //         return test.regExp.test(file[test.target])
-            //     })
-            // }
-
-            // if (result){
-            //     resolve(file)
-            // } else {
-            //     reject(new TypeError("ERROR_FILE_TYPE"))
-            // }
-
-            input.value = ""
+            resolve({
+                files,
+                raws: rawFiles
+            })
         }
 
-        function cancle(){
-            document.removeEventListener("wheel", cancle, true)
-            document.removeEventListener("mousemove", cancle, true)
-            document.removeEventListener("keydown", cancle, true)
-            reject("cancle")
+        //focus事件会比change事件提前发生
+        function focusCancel(e){
+            setTimeout(_ => {
+                cancel(e)
+            }, 1000)
         }
 
-        //通过这三个来获取用户的取消动作
-        document.addEventListener("wheel", cancle, true)
-        document.addEventListener("mousemove", cancle, true)
-        document.addEventListener("keydown", cancle, true)
+        function cancel(e){
+            unbindEvents()
+            reject("cancel")
+        }
+        
+        //绑定事件
+        function bindEvents(){
+            document.addEventListener("wheel", cancel, true)
+            document.addEventListener("mousemove", cancel, true)
+            document.addEventListener("keydown", cancel, true)
+            window.addEventListener("focus", focusCancel, true) //chrome 会触发
+        }
+
+        //解绑事件
+        function unbindEvents(){
+            document.removeEventListener("wheel", cancel, true)
+            document.removeEventListener("mousemove", cancel, true)
+            document.removeEventListener("keydown", cancel, true)
+            window.removeEventListener("focus", focusCancel, true) //chrome 会触发
+        }
+        
+        bindEvents()
         
         //兼容IE Input不在DOM树上无法触发选择的问题
         document.body.appendChild(input)
@@ -126,4 +136,4 @@ function selectFile(accept = "", size){
     })
 }
 
-module.exports = selectFile
+exports.selectFiles = selectFiles

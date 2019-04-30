@@ -13,7 +13,10 @@
     </body>
     <script>
         document.getElementById("select").addEventListener("click", function(){
-            selectFile("", 500 * 1024).then(file => console.log(file)).catch(err => console.log(err))
+            selectFile.selectFiles({
+                size: 1024 * 1024,
+                multiple: true
+            }).then(file => console.log(file)).catch(err => console.log(err))
         })
     </script>
 </html>
