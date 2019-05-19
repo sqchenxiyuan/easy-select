@@ -13,7 +13,7 @@
     </body>
     <script>
         document.getElementById("select").addEventListener("click", function(){
-            selectFile.selectFiles({
+            EasySelect.selectFiles({
                 size: 1024 * 1024,
                 multiple: true
             }).then(file => console.log(file)).catch(err => console.log(err))

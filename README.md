@@ -1,1 +1,1 @@
-# select-file
+# easy-select
