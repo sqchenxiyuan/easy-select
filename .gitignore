@@ -3,3 +3,4 @@ node_modules/
 
 # 指定文件
 package-lock.json
+test__reports
