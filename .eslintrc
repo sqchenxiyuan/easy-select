@@ -5,6 +5,9 @@
         "project": "./tsconfig.json"
     },
     "plugins": ["@typescript-eslint"],
+    "rules": {
+        "@typescript-eslint/promise-function-async": "off"
+    },
     "env": {
         "browser": true
     }

@@ -1,10 +1,44 @@
 import FileTypeFilter from './file-type'
 
+class TestBlob implements Blob {
+  public readonly size: number = 0
+
+  public readonly type: string = ''
+
+  public constructor () {
+    this.size = 0
+    this.type = ''
+  }
+
+  public slice (): Blob {
+    return this
+  }
+}
+
+class TestFile implements File {
+  public readonly lastModified: number = Date.now()
+
+  public readonly name: string
+
+  public readonly size: number = 0
+
+  public readonly type: string
+
+  public constructor (name: string, type: string) {
+    this.name = name
+    this.type = type
+  }
+
+  public slice (): Blob {
+    return new TestBlob()
+  }
+}
+
 test('FileTypeFilter .pdf 过滤', function (): void{
   const filter = new FileTypeFilter('.pdf')
 
   const files = []
-  files.push({ name: '测试.pdf', type: 'application/pdf' })
+  files.push(new TestFile('测试.pdf', 'application/pdf'))
 
   const result = filter.filter(files)
 
@@ -16,7 +50,7 @@ test('FileTypeFilter application/* 过滤', function (): void{
   const filter = new FileTypeFilter('application/*')
 
   const files = []
-  files.push({ name: '测试.pdf', type: 'application/pdf' })
+  files.push(new TestFile('测试.pdf', 'application/pdf'))
 
   const result = filter.filter(files)
 
@@ -28,7 +62,7 @@ test('FileTypeFilter application/pdf 过滤', function (): void{
   const filter = new FileTypeFilter('application/pdf')
 
   const files = []
-  files.push({ name: '测试.pdf', type: 'application/pdf' })
+  files.push(new TestFile('测试.pdf', 'application/pdf'))
 
   const result = filter.filter(files)
 
@@ -40,8 +74,8 @@ test('FileTypeFilter .pdf,application/*,application/pdf 过滤', function (): vo
   const filter = new FileTypeFilter('.pdf,application/*,application/pdf,images/*')
 
   const files = []
-  files.push({ name: '测试.pdf', type: 'application/pdf' })
-  files.push({ name: '测试.png', type: 'application/png' })
+  files.push(new TestFile('测试.pdf', 'application/pdf'))
+  files.push(new TestFile('测试.png', 'application/png'))
 
   const result = filter.filter(files)
 
@@ -53,8 +87,8 @@ test('FileTypeFilter 过滤', function (): void{
   const filter = new FileTypeFilter()
 
   const files = []
-  files.push({ name: '测试.pdf', type: 'application/pdf' })
-  files.push({ name: '测试.png', type: 'application/png' })
+  files.push(new TestFile('测试.pdf', 'application/pdf'))
+  files.push(new TestFile('测试.png', 'application/png'))
 
   const result = filter.filter(files)
 

@@ -1,87 +1,129 @@
 import FileTypeFilter from './filters/file-type'
 import FileSizeFilter from './filters/file-size'
 
+function fileArrayFrom (files: FileList): File[] {
+  const arr = []
+  for (let i = 0; i < files.length; i++) {
+    arr.push(files[i] || null)
+  }
+  return arr
+}
+
+interface SelectFilesOptions{
+  accept: string
+  size: string | number
+  multiple: boolean
+}
+
+interface SelectFilesResult{
+  files: File[]
+  raws: File[]
+}
+
+type SelectFileCallback = (err: Error | null, res: SelectFilesResult | null) => any
+
+class CancelError extends Error {
+  public constructor () {
+    super('CANCLE_SELECT_FILE')
+  }
+}
+
 // 核心选取文件函数
-function selectFiles (options) {
+// 后缀格式为 .xxx类型
+// MIME为  xxxx/yy 或者 xxxx/*
+// 逗号分隔
+function selectFiles (options: SelectFilesOptions, cb: SelectFileCallback): void {
   const {
     accept = '',
     size = Infinity,
     multiple = false
   } = options
 
-  return new Promise((resolve, reject) => {
-    // 后缀格式为 .xxx类型
-    // MIME为  xxxx/yy 或者 xxxx/*
-    // 逗号分隔
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.style.opacity = '0'
-    input.value = ''
+  const typeFilter = new FileTypeFilter(accept)
+  const sizeFilter = new FileSizeFilter(size)
 
-    const typeFilter = new FileTypeFilter(accept)
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.style.opacity = '0'
+  input.style.position = 'absolute'
+  input.value = ''
+  input.accept = typeFilter.getInputAccept()
+  input.multiple = multiple
 
-    input.accept = typeFilter.getInputAccept()
-    input.multiple = multiple
+  let flag = false
+  function callback (err: Error | null, res: SelectFilesResult | null): any {
+    if (flag) return
+    flag = true
+    cb(err, res)
+  }
 
-    input.onchange = function (e) {
-      let files = Array.from(input.files)
-      const rawFiles = files
-
-      // 啥都没有
-      if (files.length === 0) cancle()
-
-      files = typeFilter.filter(files)
-      if (size) {
-        const sizeFilter = new FileSizeFilter(size)
-        files = sizeFilter.filter(files)
-      }
-
-      unbindEvents()
-      input.onchange = null
-
-      resolve({
-        files,
-        raws: rawFiles
+  input.onchange = function (): void {
+    if (input.files === null) {
+      callback(null, {
+        files: [],
+        raws: []
       })
+      return
     }
+    let files = fileArrayFrom(input.files)
+    const rawFiles = files
 
-    // focus事件会比change事件提前发生
-    function focusCancel (e) {
-      setTimeout(_ => {
-        cancel(e)
-      }, 1000)
-    }
+    // 啥都没有
+    if (files.length === 0) cancel()
 
-    function cancel (e) {
-      unbindEvents()
-      reject('cancel')
-    }
+    files = typeFilter.filter(files)
+    files = sizeFilter.filter(files)
 
-    // 绑定事件
-    function bindEvents () {
-      document.addEventListener('wheel', cancel, true)
-      document.addEventListener('mousemove', cancel, true)
-      document.addEventListener('keydown', cancel, true)
-      window.addEventListener('focus', focusCancel, true) // chrome 会触发
-    }
+    unbindEvents()
+    input.onchange = null
 
-    // 解绑事件
-    function unbindEvents () {
-      document.removeEventListener('wheel', cancel, true)
-      document.removeEventListener('mousemove', cancel, true)
-      document.removeEventListener('keydown', cancel, true)
-      window.removeEventListener('focus', focusCancel, true) // chrome 会触发
-    }
+    callback(null, {
+      files,
+      raws: rawFiles
+    })
+  }
 
-    bindEvents()
+  // focus事件会比change事件提前发生
+  function focusCancel (): void {
+    setTimeout(function (): void {
+      cancel()
+    }, 233)
+  }
 
-    // 兼容IE Input不在DOM树上无法触发选择的问题
-    document.body.appendChild(input)
-    input.click()
-    document.body.removeChild(input)
-  })
+  function cancel (): void {
+    unbindEvents()
+    callback(new CancelError(), null)
+  }
+
+  // 绑定事件
+  function bindEvents (): void {
+    document.addEventListener('wheel', cancel, true)
+    document.addEventListener('mousemove', cancel, true)
+    document.addEventListener('keydown', cancel, true)
+    window.addEventListener('focus', focusCancel, true) // chrome 会触发
+  }
+
+  // 解绑事件
+  function unbindEvents (): void {
+    document.removeEventListener('wheel', cancel, true)
+    document.removeEventListener('mousemove', cancel, true)
+    document.removeEventListener('keydown', cancel, true)
+    window.removeEventListener('focus', focusCancel, true) // chrome 会触发
+  }
+
+  bindEvents()
+
+  // 兼容IE Input不在DOM树上无法触发选择的问题
+  document.body.appendChild(input)
+  input.click()
+  document.body.removeChild(input)
+}
+
+function isCancel (err: any): boolean {
+  return (err instanceof CancelError)
 }
 
 export {
-  selectFiles
+  selectFiles,
+  isCancel
 }

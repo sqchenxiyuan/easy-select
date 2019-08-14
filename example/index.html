@@ -16,7 +16,17 @@
             EasySelect.selectFiles({
                 size: 1024 * 1024,
                 multiple: true
-            }).then(file => console.log(file)).catch(err => console.log(err))
+            }, function(err, res){
+                if(err){
+                    if(EasySelect.isCancel(err)){
+                    console.log("cancel")
+                    } else {
+                        console.error(err)
+                    }
+                    return
+                }
+                console.log(res)
+            })
         })
     </script>
 </html>

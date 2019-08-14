@@ -1,7 +1,3 @@
-interface File{
-  size: number
-}
-
 class FileSizeFilter {
   public readonly size: number
 

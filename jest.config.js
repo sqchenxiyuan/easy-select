@@ -2,7 +2,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'test__reports',
   collectCoverageFrom: [
-    'src/**/*.ts',
+    'src/filters/*.ts',
     '!**/node_modules/**'
   ],
   coverageReporters: [

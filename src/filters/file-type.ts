@@ -1,12 +1,11 @@
-interface FileTypeFilterItem{
-  target: string
-  regExp: RegExp
+enum FileTypeFilterItemTarget{
+  NAME = 'name',
+  TYPE = 'type'
 }
 
-interface File{
-  name: string
-  type: string
-  [name: string]: string
+interface FileTypeFilterItem{
+  target: FileTypeFilterItemTarget
+  regExp: RegExp
 }
 
 // 文件类型过滤器
@@ -23,17 +22,17 @@ class FileTypeFilter {
     this.filterItems = accepts.map((type): FileTypeFilterItem => {
       if (/^\./.test(type)) { // 为后缀
         return {
-          target: 'name', // 检查名称
+          target: FileTypeFilterItemTarget.NAME, // 检查名称
           regExp: new RegExp(`${type.replace('.', '\\.')}$`, 'i')
         }
       } else if (/\/\*/.test(type)) { // 为MIME类型
         return {
-          target: 'type', // 检查名称
+          target: FileTypeFilterItemTarget.TYPE, // 检查名称
           regExp: new RegExp(`^${type.replace('*', '[a-z0-9]+')}$`, 'i')
         }
       } else { // 固定
         return {
-          target: 'type', // 检查名称
+          target: FileTypeFilterItemTarget.TYPE, // 检查名称
           regExp: new RegExp(`^${type}$`, 'i')
         }
       }
