@@ -13,12 +13,12 @@
     </body>
     <script>
         document.getElementById("select").addEventListener("click", function(){
-            EasySelect.select({
+            easySelect.select({
                 size: 1024 * 1024,
                 multiple: true
             }, function(err, res){
                 if(err){
-                    if(EasySelect.isCancel(err)){
+                    if(easySelect.isCancel(err)){
                     console.log("cancel")
                     } else {
                         console.error(err)

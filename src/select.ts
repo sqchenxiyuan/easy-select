@@ -1,6 +1,6 @@
 import FileTypeFilter from './filters/file-type'
 import FileSizeFilter from './filters/file-size'
-import { SelectCancel, isCancel } from './cancel'
+import { SELECT_CANCEL, isCancel } from './cancel'
 
 function fileArrayFrom (files: FileList): File[] {
   const arr = []
@@ -21,7 +21,7 @@ interface SelectFilesResult{
   raws: File[]
 }
 
-type SelectFileCallback = (err: Error | null, res: SelectFilesResult | null) => any
+type SelectFileCallback = (err: string | null, res: SelectFilesResult | null) => any
 
 // 核心选取文件函数
 // 后缀格式为 .xxx类型
@@ -46,7 +46,7 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   input.multiple = multiple
 
   let flag = false
-  function callback (err: Error | null, res: SelectFilesResult | null): any {
+  function callback (err: string | null, res: SelectFilesResult | null): any {
     if (flag) return
     flag = true
     cb(err, res)
@@ -87,7 +87,7 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
 
   function cancel (): void {
     unbindEvents()
-    callback(new SelectCancel(), null)
+    callback(SELECT_CANCEL, null)
   }
 
   // 绑定事件

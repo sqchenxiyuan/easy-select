@@ -1,14 +1,10 @@
-class SelectCancel extends Error {
-  public constructor () {
-    super('CANCLE_SELECT_FILE')
-  }
-}
+const SELECT_CANCEL = "SELECT_CANCEL"
 
 function isCancel (err: any): boolean {
-  return (err instanceof SelectCancel)
+  return err === SELECT_CANCEL
 }
 
 export {
-  SelectCancel,
+  SELECT_CANCEL,
   isCancel
 }

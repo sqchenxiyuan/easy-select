@@ -2,12 +2,16 @@
     "name": "easy-select",
     "version": "0.1.0",
     "description": "select file",
-    "main": "index.js",
+    "main": "src/easy-select.js",
     "scripts": {
         "dev": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
         "build": "webpack --inline --progress --config build/webpack.config.prod.js",
         "test": "jest --config jest.config.js"
     },
+    "files": [
+        "src/*",
+        "dist/*"
+    ],
     "devDependencies": {
         "core-js": "3.2.0",
         "webpack": "4.39.1",

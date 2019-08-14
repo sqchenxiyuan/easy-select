@@ -4,13 +4,13 @@
 
 ## API
 
-## selectFiles(options) ==> Promise
+## easySelect(options, callback) => void
 
 调用选取文件函数
 
 ### 参数
 
-#### options
+### options
 
 选取文件对象
 
@@ -20,13 +20,19 @@
 |size|number|Infinity|选取文件的大小的限制|
 |multiple|boolean|false|是否可以选取批量文件|
 
-### 响应
+### callback: (err, res) => void
 
-返回一个Promise对象,成功后返回一个对象
+回调函数, err为回调函数结果可以用`isCancel`判断是否为取消响应,res为结果
 
-|属性名|类型|备注|
-|---|---|---|
-|files|array\<file\>|符合条件的文件列表|
-|raws|array\<file\>|用户原始选择的文件列表|
+``` javascript
+{
+    files: [],
+    raws: []
+}
+```
 
-如果用户取消可以使用catch捕获一个"cancle"的字符串
+files数组表示最终结果的文件数组,raws数组表示为用户最初选择的文件数组,可以用于判断用户是否选择了有效的文件
+
+## easySelect.isCancel(err) => boolean
+
+判断返回是否表示为取消(目前只有取消才有错误的返回)

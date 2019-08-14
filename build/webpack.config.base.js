@@ -9,7 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/public/',
     filename: '[name].js',
-    library: 'EasySelect',
+    library: 'easySelect',
     libraryTarget: 'umd'
   },
   module: {
