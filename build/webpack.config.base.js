@@ -3,13 +3,13 @@ const path = require('path')
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    'easy-select': './src/index.js'
+    'easy-select-file': './src/index.js'
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/public/',
     filename: '[name].js',
-    library: 'easySelect',
+    library: 'easySelectFile',
     libraryTarget: 'umd'
   },
   module: {

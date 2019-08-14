@@ -1,4 +1,4 @@
-# easy-select
+# easy-select-file
 
 这个库将提供便捷的方式来触发用户选取文件的功能
 

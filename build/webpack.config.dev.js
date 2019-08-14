@@ -17,7 +17,7 @@ module.exports = merge(webpackBaseConfig, {
       filename: 'index.html',
       template: './example/index.html',
       inject: true,
-      title: 'easy-select'
+      title: 'easy-select-file'
     })
   ],
   devServer: {
