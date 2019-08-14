@@ -1,5 +1,6 @@
 import FileTypeFilter from './filters/file-type'
 import FileSizeFilter from './filters/file-size'
+import { SelectCancel, isCancel } from './cancel'
 
 function fileArrayFrom (files: FileList): File[] {
   const arr = []
@@ -22,17 +23,11 @@ interface SelectFilesResult{
 
 type SelectFileCallback = (err: Error | null, res: SelectFilesResult | null) => any
 
-class CancelError extends Error {
-  public constructor () {
-    super('CANCLE_SELECT_FILE')
-  }
-}
-
 // 核心选取文件函数
 // 后缀格式为 .xxx类型
 // MIME为  xxxx/yy 或者 xxxx/*
 // 逗号分隔
-function selectFiles (options: SelectFilesOptions, cb: SelectFileCallback): void {
+function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   const {
     accept = '',
     size = Infinity,
@@ -92,7 +87,7 @@ function selectFiles (options: SelectFilesOptions, cb: SelectFileCallback): void
 
   function cancel (): void {
     unbindEvents()
-    callback(new CancelError(), null)
+    callback(new SelectCancel(), null)
   }
 
   // 绑定事件
@@ -119,11 +114,6 @@ function selectFiles (options: SelectFilesOptions, cb: SelectFileCallback): void
   document.body.removeChild(input)
 }
 
-function isCancel (err: any): boolean {
-  return (err instanceof CancelError)
-}
-
-export {
-  selectFiles,
-  isCancel
-}
+select.isCancel = isCancel
+select.select = select
+export default select

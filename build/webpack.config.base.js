@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    'select-file': './src/index.ts'
+    'easy-select': './src/index.js'
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
