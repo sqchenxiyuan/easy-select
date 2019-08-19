@@ -2,7 +2,7 @@
     "name": "easy-select-file",
     "version": "0.1.1",
     "description": "select file",
-    "main": "src/easy-select-file.js",
+    "main": "dist/easy-select-file.js",
     "scripts": {
         "dev": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
         "build": "webpack --inline --progress --config build/webpack.config.prod.js",
