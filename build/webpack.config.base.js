@@ -15,13 +15,10 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(j|t)s$/,
+        test: /\.js$/,
         loader: 'babel-loader?cacheDirectory=true',
         exclude: /node_modules/
       }
     ]
-  },
-  resolve: {
-    extensions: ['.ts', '.js']
   }
 }

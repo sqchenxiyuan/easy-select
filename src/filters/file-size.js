@@ -1,11 +1,9 @@
 class FileSizeFilter {
-  public readonly size: number
-
-  public constructor (size: string | number = '2m') {
+  constructor (size = '2m') {
     this.size = FileSizeFilter.fileSize(size)
   }
 
-  private static fileSize (size: string | number): number {
+  static fileSize (size) {
     if (typeof size === 'number') return size
     const unit = size.slice(-1).toLowerCase()
     const sizeNum = parseFloat(size.slice(0, -1))
@@ -18,9 +16,9 @@ class FileSizeFilter {
     }
   }
 
-  public filter (files: File[]): File[] {
+  filter (files) {
     const maxSize = this.size
-    return files.filter((file): boolean => {
+    return files.filter(file => {
       return file.size <= maxSize
     })
   }

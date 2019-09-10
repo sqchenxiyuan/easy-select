@@ -1,6 +1,6 @@
-import FileSizeFilter from './file-size'
+import FileSizeFilter from './file-size.js'
 
-test('FileSizeFilter 512 过滤', function (): void{
+test('FileSizeFilter 512 过滤', function () {
   const filter = new FileSizeFilter(512)
 
   const files = []
@@ -14,7 +14,7 @@ test('FileSizeFilter 512 过滤', function (): void{
   expect(result.length).toEqual(1)
 })
 
-test('FileSizeFilter default(2m) 过滤', function (): void{
+test('FileSizeFilter default(2m) 过滤', function () {
   const filter = new FileSizeFilter()
 
   const files = []
@@ -28,7 +28,7 @@ test('FileSizeFilter default(2m) 过滤', function (): void{
   expect(result.length).toEqual(2)
 })
 
-test('FileSizeFilter 600k 过滤', function (): void{
+test('FileSizeFilter 600k 过滤', function () {
   const filter = new FileSizeFilter('600k')
 
   const files = []
@@ -42,7 +42,7 @@ test('FileSizeFilter 600k 过滤', function (): void{
   expect(result.length).toEqual(2)
 })
 
-test('FileSizeFilter 500M 过滤', function (): void{
+test('FileSizeFilter 500M 过滤', function () {
   const filter = new FileSizeFilter('500M')
 
   const files = []
@@ -56,7 +56,7 @@ test('FileSizeFilter 500M 过滤', function (): void{
   expect(result.length).toEqual(3)
 })
 
-test('FileSizeFilter 3G 过滤', function (): void{
+test('FileSizeFilter 3G 过滤', function () {
   const filter = new FileSizeFilter('3G')
 
   const files = []
@@ -70,7 +70,7 @@ test('FileSizeFilter 3G 过滤', function (): void{
   expect(result.length).toEqual(4)
 })
 
-test('FileSizeFilter 6666 过滤', function (): void{
+test('FileSizeFilter 6666 过滤', function () {
   const filter = new FileSizeFilter('6666')
 
   const files = []

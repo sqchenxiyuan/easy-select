@@ -1,40 +1,15 @@
 import FileTypeFilter from './file-type'
 
-class TestBlob implements Blob {
-  public readonly size: number = 0
-
-  public readonly type: string = ''
-
-  public constructor () {
-    this.size = 0
-    this.type = ''
-  }
-
-  public slice (): Blob {
-    return this
-  }
-}
-
-class TestFile implements File {
-  public readonly lastModified: number = Date.now()
-
-  public readonly name: string
-
-  public readonly size: number = 0
-
-  public readonly type: string
-
-  public constructor (name: string, type: string) {
+class TestFile {
+  constructor (name, type) {
     this.name = name
     this.type = type
-  }
-
-  public slice (): Blob {
-    return new TestBlob()
+    this.size = 0
+    this.lastModified = Date.now()
   }
 }
 
-test('FileTypeFilter .pdf 过滤', function (): void{
+test('FileTypeFilter .pdf 过滤', function () {
   const filter = new FileTypeFilter('.pdf')
 
   const files = []
@@ -46,7 +21,7 @@ test('FileTypeFilter .pdf 过滤', function (): void{
   expect(filter.getInputAccept()).toEqual('.pdf')
 })
 
-test('FileTypeFilter application/* 过滤', function (): void{
+test('FileTypeFilter application/* 过滤', function () {
   const filter = new FileTypeFilter('application/*')
 
   const files = []
@@ -58,7 +33,7 @@ test('FileTypeFilter application/* 过滤', function (): void{
   expect(filter.getInputAccept()).toEqual('application/*')
 })
 
-test('FileTypeFilter application/pdf 过滤', function (): void{
+test('FileTypeFilter application/pdf 过滤', function () {
   const filter = new FileTypeFilter('application/pdf')
 
   const files = []
@@ -70,7 +45,7 @@ test('FileTypeFilter application/pdf 过滤', function (): void{
   expect(filter.getInputAccept()).toEqual('application/pdf')
 })
 
-test('FileTypeFilter .pdf,application/*,application/pdf 过滤', function (): void{
+test('FileTypeFilter .pdf,application/*,application/pdf 过滤', function () {
   const filter = new FileTypeFilter('.pdf,application/*,application/pdf,images/*')
 
   const files = []
@@ -83,7 +58,7 @@ test('FileTypeFilter .pdf,application/*,application/pdf 过滤', function (): vo
   expect(filter.getInputAccept()).toEqual('.pdf, application/*, application/pdf, images/*')
 })
 
-test('FileTypeFilter 过滤', function (): void{
+test('FileTypeFilter 过滤', function () {
   const filter = new FileTypeFilter()
 
   const files = []

@@ -1,2 +1,252 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.easySelectFile=t():e.easySelectFile=t()}(window,function(){return function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/public/",n(n.s=0)}([function(e,t,n){e.exports=n(1).default},function(e,t,n){"use strict";function r(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function o(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var i;n.r(t),function(e){e.NAME="name",e.TYPE="type"}(i||(i={}));var u=function(){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),o(this,"accepts",void 0),o(this,"filterItems",void 0);var n=t.toLowerCase().split(",").map(function(e){return e.trim()}).filter(function(e){return!!e});this.accepts=n,this.filterItems=n.map(function(e){return/^\./.test(e)?{target:i.NAME,regExp:new RegExp("".concat(e.replace(".","\\."),"$"),"i")}:/\/\*/.test(e)?{target:i.TYPE,regExp:new RegExp("^".concat(e.replace("*","[a-z0-9]+"),"$"),"i")}:{target:i.TYPE,regExp:new RegExp("^".concat(e,"$"),"i")}})}var t,n,u;return t=e,(n=[{key:"filter",value:function(e){var t=this;return 0===this.filterItems.length?e:e.filter(function(e){return t.filterItems.some(function(t){return t.regExp.test(e[t.target].toLowerCase())})})}},{key:"getInputAccept",value:function(){return this.accepts.join(", ")}}])&&r(t.prototype,n),u&&r(t,u),e}();function c(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}var l=function(){function e(){var t,n,r,o=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"2m";!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),r=void 0,(n="size")in(t=this)?Object.defineProperty(t,n,{value:r,enumerable:!0,configurable:!0,writable:!0}):t[n]=r,this.size=e.fileSize(o)}var t,n,r;return t=e,r=[{key:"fileSize",value:function(e){if("number"==typeof e)return e;var t=e.slice(-1).toLowerCase(),n=parseFloat(e.slice(0,-1));switch(t){case"k":return 1024*n;case"m":return 1024*n*1024;case"g":return 1024*n*1024*1024;default:return parseFloat(e)}}}],(n=[{key:"filter",value:function(e){var t=this.size;return e.filter(function(e){return e.size<=t})}}])&&c(t.prototype,n),r&&c(t,r),e}(),a="SELECT_CANCEL";function f(e,t){var n=e.accept,r=void 0===n?"":n,o=e.size,i=void 0===o?1/0:o,c=e.multiple,f=void 0!==c&&c,s=new u(r),p=new l(i),d=document.createElement("input");d.type="file",d.style.opacity="0",d.style.position="absolute",d.value="",d.accept=s.getInputAccept(),d.multiple=f;var v=!1;function m(e,n){v||(v=!0,t(e,n))}function y(){setTimeout(function(){b()},233)}function b(){g(),m(a,null)}function g(){document.removeEventListener("wheel",b,!0),document.removeEventListener("mousemove",b,!0),document.removeEventListener("keydown",b,!0),window.removeEventListener("focus",y,!0)}d.onchange=function(){if(null!==d.files){var e=function(e){for(var t=[],n=0;n<e.length;n++)t.push(e[n]||null);return t}(d.files),t=e;0===e.length&&b(),e=s.filter(e),e=p.filter(e),g(),d.onchange=null,m(null,{files:e,raws:t})}else m(null,{files:[],raws:[]})},document.addEventListener("wheel",b,!0),document.addEventListener("mousemove",b,!0),document.addEventListener("keydown",b,!0),window.addEventListener("focus",y,!0),document.body.appendChild(d),d.click(),document.body.removeChild(d)}f.isCancel=function(e){return e===a},f.select=f;t.default=f}])});
-//# sourceMappingURL=easy-select-file.js.map
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global.easySelectFile = {}));
+}(this, function (exports) { 'use strict';
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  var FileTypeFilterItemTarget = {
+    NAME: 'name',
+    TYPE: 'type' // 文件类型过滤器
+
+  };
+
+  var FileTypeFilter =
+  /*#__PURE__*/
+  function () {
+    function FileTypeFilter() {
+      var typeString = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+      _classCallCheck(this, FileTypeFilter);
+
+      var accepts = typeString.toLowerCase().split(',').map(function (type) {
+        return type.trim();
+      }).filter(function (type) {
+        return !!type;
+      }); // 文本类型数组  支持后缀模式(.xxx), MIME模式(xxx/yyyy)
+
+      this.accepts = accepts; // 构建过滤元素数组
+      // 类型过滤元素
+
+      this.filterItems = accepts.map(function (type) {
+        if (/^\./.test(type)) {
+          // 为后缀
+          return {
+            target: FileTypeFilterItemTarget.NAME,
+            // 检查名称
+            regExp: new RegExp("".concat(type.replace('.', '\\.'), "$"), 'i')
+          };
+        } else if (/\/\*/.test(type)) {
+          // 为MIME类型
+          return {
+            target: FileTypeFilterItemTarget.TYPE,
+            // 检查名称
+            regExp: new RegExp("^".concat(type.replace('*', '[a-z0-9]+'), "$"), 'i')
+          };
+        } else {
+          // 固定
+          return {
+            target: FileTypeFilterItemTarget.TYPE,
+            // 检查名称
+            regExp: new RegExp("^".concat(type, "$"), 'i')
+          };
+        }
+      });
+    }
+
+    _createClass(FileTypeFilter, [{
+      key: "filter",
+      value: function filter(files) {
+        var _this = this;
+
+        if (this.filterItems.length === 0) return files;
+        return files.filter(function (file) {
+          return _this.filterItems.some(function (test) {
+            return test.regExp.test(file[test.target].toLowerCase());
+          });
+        });
+      }
+    }, {
+      key: "getInputAccept",
+      value: function getInputAccept() {
+        return this.accepts.join(', ');
+      }
+    }]);
+
+    return FileTypeFilter;
+  }();
+
+  var FileSizeFilter =
+  /*#__PURE__*/
+  function () {
+    function FileSizeFilter() {
+      var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '2m';
+
+      _classCallCheck(this, FileSizeFilter);
+
+      this.size = FileSizeFilter.fileSize(size);
+    }
+
+    _createClass(FileSizeFilter, [{
+      key: "filter",
+      value: function filter(files) {
+        var maxSize = this.size;
+        return files.filter(function (file) {
+          return file.size <= maxSize;
+        });
+      }
+    }], [{
+      key: "fileSize",
+      value: function fileSize(size) {
+        if (typeof size === 'number') return size;
+        var unit = size.slice(-1).toLowerCase();
+        var sizeNum = parseFloat(size.slice(0, -1));
+
+        switch (unit) {
+          case 'k':
+            return sizeNum * 1024;
+
+          case 'm':
+            return sizeNum * 1024 * 1024;
+
+          case 'g':
+            return sizeNum * 1024 * 1024 * 1024;
+
+          default:
+            return parseFloat(size);
+        }
+      }
+    }]);
+
+    return FileSizeFilter;
+  }();
+
+  var SELECT_CANCEL = 'SELECT_CANCEL';
+
+  function isCancel(err) {
+    return err === SELECT_CANCEL;
+  }
+
+  function fileArrayFrom(files) {
+    var arr = [];
+
+    for (var i = 0; i < files.length; i++) {
+      arr.push(files[i] || null);
+    }
+
+    return arr;
+  } // 核心选取文件函数
+  // 后缀格式为 .xxx类型
+  // MIME为  xxxx/yy 或者 xxxx/*
+  // 逗号分隔
+
+
+  function select(options, cb) {
+    var _options$accept = options.accept,
+        accept = _options$accept === void 0 ? '' : _options$accept,
+        _options$size = options.size,
+        size = _options$size === void 0 ? Infinity : _options$size,
+        _options$multiple = options.multiple,
+        multiple = _options$multiple === void 0 ? false : _options$multiple;
+    var typeFilter = new FileTypeFilter(accept);
+    var sizeFilter = new FileSizeFilter(size);
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.style.opacity = '0';
+    input.style.position = 'absolute';
+    input.value = '';
+    input.accept = typeFilter.getInputAccept();
+    input.multiple = multiple;
+    var flag = false;
+
+    function callback(err, res) {
+      if (flag) return;
+      flag = true;
+      cb(err, res);
+    }
+
+    input.onchange = function () {
+      if (input.files === null) {
+        callback(null, {
+          files: [],
+          raws: []
+        });
+        return;
+      }
+
+      var files = fileArrayFrom(input.files);
+      var rawFiles = files; // 啥都没有
+
+      if (files.length === 0) cancel();
+      files = typeFilter.filter(files);
+      files = sizeFilter.filter(files);
+      unbindEvents();
+      input.onchange = null;
+      callback(null, {
+        files: files,
+        raws: rawFiles
+      });
+    }; // focus事件会比change事件提前发生
+
+
+    function focusCancel() {
+      setTimeout(function () {
+        cancel();
+      }, 233);
+    }
+
+    function cancel() {
+      unbindEvents();
+      callback(SELECT_CANCEL, null);
+    } // 绑定事件
+
+
+    function bindEvents() {
+      document.addEventListener('wheel', cancel, true);
+      document.addEventListener('mousemove', cancel, true);
+      document.addEventListener('keydown', cancel, true);
+      window.addEventListener('focus', focusCancel, true); // chrome 会触发
+    } // 解绑事件
+
+
+    function unbindEvents() {
+      document.removeEventListener('wheel', cancel, true);
+      document.removeEventListener('mousemove', cancel, true);
+      document.removeEventListener('keydown', cancel, true);
+      window.removeEventListener('focus', focusCancel, true); // chrome 会触发
+    }
+
+    bindEvents(); // 兼容IE Input不在DOM树上无法触发选择的问题
+
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+  }
+
+  exports.isCancel = isCancel;
+  exports.select = select;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+}));

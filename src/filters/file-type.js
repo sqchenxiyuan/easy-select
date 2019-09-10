@@ -1,25 +1,18 @@
-enum FileTypeFilterItemTarget{
-  NAME = 'name',
-  TYPE = 'type'
-}
-
-interface FileTypeFilterItem{
-  target: FileTypeFilterItemTarget
-  regExp: RegExp
+const FileTypeFilterItemTarget = {
+  NAME: 'name',
+  TYPE: 'type'
 }
 
 // 文件类型过滤器
 class FileTypeFilter {
-  private accepts: string[] // 文本类型数组  支持后缀模式(.xxx), MIME模式(xxx/yyyy)
-
-  private filterItems: FileTypeFilterItem[] // 类型过滤元素
-
-  public constructor (typeString: string = '') {
-    const accepts = typeString.toLowerCase().split(',').map((type): string => type.trim()).filter((type): boolean => !!type)
+  constructor (typeString = '') {
+    const accepts = typeString.toLowerCase().split(',').map(type => type.trim()).filter(type => !!type)
+    // 文本类型数组  支持后缀模式(.xxx), MIME模式(xxx/yyyy)
     this.accepts = accepts
 
     // 构建过滤元素数组
-    this.filterItems = accepts.map((type): FileTypeFilterItem => {
+    // 类型过滤元素
+    this.filterItems = accepts.map(type => {
       if (/^\./.test(type)) { // 为后缀
         return {
           target: FileTypeFilterItemTarget.NAME, // 检查名称
@@ -39,17 +32,17 @@ class FileTypeFilter {
     })
   }
 
-  public filter (files: File[]): File[] {
+  filter (files) {
     if (this.filterItems.length === 0) return files
 
-    return files.filter((file: File): boolean => {
-      return this.filterItems.some((test): boolean => {
+    return files.filter(file => {
+      return this.filterItems.some(test => {
         return test.regExp.test(file[test.target].toLowerCase())
       })
     })
   }
 
-  public getInputAccept (): string {
+  getInputAccept () {
     return this.accepts.join(', ')
   }
 }

@@ -1,14 +1,7 @@
 {
-    "extends": "standard-with-typescript",
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "project": "./tsconfig.json"
-    },
-    "plugins": ["@typescript-eslint"],
-    "rules": {
-        "@typescript-eslint/promise-function-async": "off"
-    },
+    "extends": "standard",
     "env": {
-        "browser": true
+        "browser": true,
+        "jest": true
     }
 }

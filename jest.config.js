@@ -2,7 +2,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'test__reports',
   collectCoverageFrom: [
-    'src/filters/*.ts',
+    'src/filters/*.js',
     '!**/node_modules/**'
   ],
   coverageReporters: [
@@ -18,11 +18,10 @@ module.exports = {
     // }
   },
   moduleFileExtensions: [
-    'js',
-    'ts'
+    'js'
   ],
   modulePaths: [
     '<rootDir>'
   ],
-  testRegex: '\\.test\\.ts$'
+  testRegex: '\\.test\\.js$'
 }

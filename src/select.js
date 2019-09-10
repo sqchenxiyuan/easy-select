@@ -1,8 +1,8 @@
-import FileTypeFilter from './filters/file-type'
-import FileSizeFilter from './filters/file-size'
-import { SELECT_CANCEL, isCancel } from './cancel'
+import FileTypeFilter from './filters/file-type.js'
+import FileSizeFilter from './filters/file-size.js'
+import { SELECT_CANCEL, isCancel } from './cancel.js'
 
-function fileArrayFrom (files: FileList): File[] {
+function fileArrayFrom (files) {
   const arr = []
   for (let i = 0; i < files.length; i++) {
     arr.push(files[i] || null)
@@ -10,24 +10,11 @@ function fileArrayFrom (files: FileList): File[] {
   return arr
 }
 
-interface SelectFilesOptions{
-  accept: string
-  size: string | number
-  multiple: boolean
-}
-
-interface SelectFilesResult{
-  files: File[]
-  raws: File[]
-}
-
-type SelectFileCallback = (err: string | null, res: SelectFilesResult | null) => any
-
 // 核心选取文件函数
 // 后缀格式为 .xxx类型
 // MIME为  xxxx/yy 或者 xxxx/*
 // 逗号分隔
-function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
+function select (options, cb) {
   const {
     accept = '',
     size = Infinity,
@@ -46,13 +33,13 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   input.multiple = multiple
 
   let flag = false
-  function callback (err: string | null, res: SelectFilesResult | null): any {
+  function callback (err, res) {
     if (flag) return
     flag = true
     cb(err, res)
   }
 
-  input.onchange = function (): void {
+  input.onchange = function () {
     if (input.files === null) {
       callback(null, {
         files: [],
@@ -79,19 +66,19 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   }
 
   // focus事件会比change事件提前发生
-  function focusCancel (): void {
-    setTimeout(function (): void {
+  function focusCancel () {
+    setTimeout(function () {
       cancel()
     }, 233)
   }
 
-  function cancel (): void {
+  function cancel () {
     unbindEvents()
     callback(SELECT_CANCEL, null)
   }
 
   // 绑定事件
-  function bindEvents (): void {
+  function bindEvents () {
     document.addEventListener('wheel', cancel, true)
     document.addEventListener('mousemove', cancel, true)
     document.addEventListener('keydown', cancel, true)
@@ -99,7 +86,7 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   }
 
   // 解绑事件
-  function unbindEvents (): void {
+  function unbindEvents () {
     document.removeEventListener('wheel', cancel, true)
     document.removeEventListener('mousemove', cancel, true)
     document.removeEventListener('keydown', cancel, true)
@@ -114,6 +101,4 @@ function select (options: SelectFilesOptions, cb: SelectFileCallback): void {
   document.body.removeChild(input)
 }
 
-select.isCancel = isCancel
-select.select = select
-export default select
+export { select, isCancel }
