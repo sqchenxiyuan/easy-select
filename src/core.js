@@ -1,62 +1,55 @@
 import FileTypeFilter from './filters/file-type.js'
 import FileSizeFilter from './filters/file-size.js'
-import { SELECT_CANCEL, isCancel } from './cancel.js'
-
-function fileArrayFrom (files) {
-  const arr = []
-  for (let i = 0; i < files.length; i++) {
-    arr.push(files[i] || null)
-  }
-  return arr
-}
+import { buildCancel } from './cancel.js'
 
 // 核心选取文件函数
 // 后缀格式为 .xxx类型
 // MIME为  xxxx/yy 或者 xxxx/*
 // 逗号分隔
-function select (options, cb) {
+function selectFilesCore (options, cb) {
   const {
     accept = '',
-    size = Infinity,
+    size,
+    minSize = 0,
+    maxSize = Infinity,
     multiple = false
   } = options
 
   const typeFilter = new FileTypeFilter(accept)
-  const sizeFilter = new FileSizeFilter(size)
+  const sizeFilter = new FileSizeFilter(size || maxSize, minSize)
 
   const input = document.createElement('input')
   input.type = 'file'
-  input.style.opacity = '0'
-  input.style.position = 'absolute'
+  input.style.opacity = '0' // 不被看到
+  input.style.position = 'absolute' // 不影响样式
   input.value = ''
-  input.accept = typeFilter.getInputAccept()
-  input.multiple = multiple
+  input.accept = typeFilter.getInputAccept() // 设置accept
+  input.multiple = multiple // 是否多选
 
-  let flag = false
-  function callback (err, res) {
-    if (flag) return
-    flag = true
-    cb(err, res)
+  // 是否已经返回结果
+  let returned = false
+  function callback (err, result) {
+    if (returned) return
+    returned = true
+    if (cb) cb(err, result)
   }
 
-  input.onchange = function () {
-    if (input.files === null) {
-      callback(null, {
-        files: [],
-        raws: []
-      })
+  function onChange () {
+    // 没有选择文件, 取消
+    if (input.files === null || input.files.length === 0) {
+      cancel()
       return
     }
-    let files = fileArrayFrom(input.files)
-    const rawFiles = files
 
-    // 啥都没有
-    if (files.length === 0) cancel()
+    // 解绑
+    unbindEvents()
+
+    let files = Array.from(input.files) // 从伪数组转换为数组
+    const rawFiles = files
 
     files = typeFilter.filter(files)
     files = sizeFilter.filter(files)
 
-    unbindEvents()
     input.onchange = null
 
     callback(null, {
@@ -74,11 +67,12 @@ function select (options, cb) {
 
   function cancel () {
     unbindEvents()
-    callback(SELECT_CANCEL, null)
+    callback(buildCancel(), null)
   }
 
   // 绑定事件
   function bindEvents () {
+    input.onchange = onChange
     document.addEventListener('wheel', cancel, true)
     document.addEventListener('mousemove', cancel, true)
     document.addEventListener('keydown', cancel, true)
@@ -87,6 +81,7 @@ function select (options, cb) {
 
   // 解绑事件
   function unbindEvents () {
+    input.onchange = null
     document.removeEventListener('wheel', cancel, true)
     document.removeEventListener('mousemove', cancel, true)
     document.removeEventListener('keydown', cancel, true)
@@ -101,4 +96,4 @@ function select (options, cb) {
   document.body.removeChild(input)
 }
 
-export { select, isCancel }
+export default selectFilesCore

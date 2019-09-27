@@ -1,13 +1,13 @@
 module.exports = {
-  collectCoverage: true,
   coverageDirectory: 'test__reports',
+  collectCoverage: true,
   collectCoverageFrom: [
     'src/filters/*.js',
     '!**/node_modules/**'
   ],
   coverageReporters: [
     'text',
-    'html'
+    'json'
   ],
   coverageThreshold: {
     // "global": {

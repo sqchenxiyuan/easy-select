@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title><%= htmlWebpackPlugin.options.title%></title>
+        <title>easy-select-file</title>
     </head>
     <body>
         <div>
@@ -11,15 +11,16 @@
             <button id="select">点击选择</button>
         </div>
     </body>
+    <script src="../dist/easy-select-file.browser.js"></script>
     <script>
         document.getElementById("select").addEventListener("click", function(){
-            easySelectFile.select({
+            easySelectFile({
                 size: 1024 * 1024,
                 multiple: true
             }, function(err, res){
                 if(err){
                     if(easySelectFile.isCancel(err)){
-                    console.log("cancel")
+                        console.log("cancel")
                     } else {
                         console.error(err)
                     }

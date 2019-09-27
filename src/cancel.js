@@ -1,10 +1,14 @@
-const SELECT_CANCEL = 'SELECT_CANCEL'
+const CANCEL_SELECT = 'CANCEL_SELECT'
+
+function buildCancel () {
+  return CANCEL_SELECT
+}
 
 function isCancel (err) {
-  return err === SELECT_CANCEL
+  return err === CANCEL_SELECT
 }
 
 export {
-  SELECT_CANCEL,
+  buildCancel,
   isCancel
 }
