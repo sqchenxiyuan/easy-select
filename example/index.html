@@ -8,26 +8,54 @@
     <body>
         <div>
             <h1>文件选择库</h1>
-            <button id="select">点击选择</button>
+            <p>
+                <button id="select-signle-file">点击选择单个图片easySelectFile.selectFile(cb)</button>
+                <button id="select-signle-image-file">点击选择单个图片easySelectFile.selectFile({accept: "image/*", cb})</button>
+                <button id="select-signle-10k-100k-image-file">点击选择单个图片easySelectFile.selectFile({accept: "image/*"}, cb)</button>
+            </p>
+            <p>
+                <button id="select-signle-files">点击选择单个图片easySelectFile.selectFiles(cb)</button>
+                <button id="select-signle-image-files">点击选择单个图片easySelectFile.selectFiles({accept: "image/*", cb})</button>
+                <button id="select-signle-10k-100k-image-files">点击选择单个图片easySelectFile.selectFiles({accept: "image/*"}, cb)</button>
+            </p>
         </div>
     </body>
     <script src="../dist/easy-select-file.browser.js"></script>
     <script>
-        document.getElementById("select").addEventListener("click", function(){
-            easySelectFile({
-                size: 1024 * 1024,
-                multiple: true
-            }, function(err, res){
-                if(err){
-                    if(easySelectFile.isCancel(err)){
-                        console.log("cancel")
-                    } else {
-                        console.error(err)
-                    }
-                    return
+        function result(err, data){
+            if(err){
+                if(easySelectFile.isCancel(err)){
+                    alert("cancel")
+                } else if(err instanceof easySelectFile.errors.FileSizeOrTypeError) {
+                    alert("size or type error")
                 }
-                console.log(res)
-            })
+            } else {
+                if(Array.isArray(data)){
+                    alert("选中了" + data.length + "一个文件")
+                } else {
+                    alert("选中了1个文件")
+                }
+            }
+        }
+
+        document.getElementById("select-signle-file").addEventListener("click", function(){
+            easySelectFile.selectFile(result)
+        })
+        document.getElementById("select-signle-image-file").addEventListener("click", function(){
+            easySelectFile.selectFile({ accept: "image/*"}, result)
+        })
+        document.getElementById("select-signle-10k-100k-image-file").addEventListener("click", function(){
+            easySelectFile.selectFile({ accept: "image/*", minSize: "10k", maxSize: "100k"}, result)
+        })
+
+        document.getElementById("select-signle-files").addEventListener("click", function(){
+            easySelectFile.selectFiles(result)
+        })
+        document.getElementById("select-signle-image-files").addEventListener("click", function(){
+            easySelectFile.selectFiles({ accept: "image/*"}, result)
+        })
+        document.getElementById("select-signle-10k-100k-image-files").addEventListener("click", function(){
+            easySelectFile.selectFiles({ accept: "image/*", minSize: "10k", maxSize: "100k"}, result)
         })
     </script>
 </html>
