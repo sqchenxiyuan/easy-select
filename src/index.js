@@ -63,7 +63,7 @@ function selectFiles () {
   })
 }
 
-const easySelect = selectFilesCore
+const easySelect = {}
 easySelect.isCancel = isCancel
 easySelect.selectFile = selectFile
 easySelect.selectFiles = selectFiles
